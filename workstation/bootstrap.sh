@@ -13,13 +13,6 @@ if [ "${UPGRADE_PACKAGES}" != "none" ]; then
   sudo add-apt-repository ppa:keithw/mosh-dev -y
   sudo add-apt-repository ppa:jonathonf/vim -y
 
-  CLOUD_SDK_SOURCE="/etc/apt/sources.list.d/google-cloud-sdk.list"
-  CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-  if [ ! -f "${CLOUD_SDK_SOURCE}" ]; then
-    echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | tee -a ${CLOUD_SDK_SOURCE}
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-  fi
-
   sudo apt-get update
   sudo apt-get upgrade -y
 fi
@@ -42,12 +35,10 @@ sudo apt-get install -qq \
   git-crypt \
   gnupg \
   gnupg2 \
-  google-cloud-sdk \
-  google-cloud-sdk-app-engine-go \
   htop \
-  hugo \
   ipcalc \
   jq \
+  lastpass-cli \
   less \
   libclang-dev \
   liblzma-dev \
@@ -60,6 +51,7 @@ sudo apt-get install -qq \
   lldb \
   locales \
   man \
+  mercurial \
   mosh \
   mtr-tiny \
   musl-tools \
@@ -104,19 +96,11 @@ rm -rf /var/lib/apt/lists/*
 
 # install Go
 if ! [ -x "$(command -v go)" ]; then
-  export GO_VERSION="1.13"
+  export GO_VERSION="1.13.8"
   wget "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz" 
   tar -C /usr/local -xzf "go${GO_VERSION}.linux-amd64.tar.gz" 
   rm -f "go${GO_VERSION}.linux-amd64.tar.gz"
   export PATH="/usr/local/go/bin:$PATH"
-fi
-
-# install 1password
-if ! [ -x "$(command -v op)" ]; then
-  export OP_VERSION="v0.5.6-003"
-  curl -sS -o 1password.zip https://cache.agilebits.com/dist/1P/op/pkg/${OP_VERSION}/op_linux_amd64_${OP_VERSION}.zip
-  unzip 1password.zip op -d /usr/local/bin
-  rm -f 1password.zip
 fi
 
 # install kubectl
@@ -145,26 +129,6 @@ if ! [ -x "$(command -v terraform)" ]; then
   rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 fi
 
-# install protobuf
-if ! [ -x "$(command -v protoc)" ]; then
-  export PROTOBUF_VERSION="3.8.0"
-  mkdir -p protobuf_install 
-  pushd protobuf_install
-  wget https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VERSION}/protoc-${PROTOBUF_VERSION}-linux-x86_64.zip
-  unzip protoc-${PROTOBUF_VERSION}-linux-x86_64.zip
-  mv bin/protoc /usr/local/bin
-  mv include/* /usr/local/include/
-  popd
-  rm -rf protobuf_install
-fi
-
-# install cloud_sql_proxy
-if ! [ -x "$(command -v cloud_sql_proxy)" ]; then
-  wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
-  chmod +x cloud_sql_proxy 
-  mv cloud_sql_proxy /usr/local/bin
-fi
-
 # install tools
 if ! [ -x "$(command -v jump)" ]; then
   echo " ==> Installing jump .."
@@ -172,17 +136,6 @@ if ! [ -x "$(command -v jump)" ]; then
   wget https://github.com/gsamokovarov/jump/releases/download/v${JUMP_VERSION}/jump_${JUMP_VERSION}_amd64.deb
   sudo dpkg -i jump_${JUMP_VERSION}_amd64.deb
   rm -f jump_${JUMP_VERSION}_amd64.deb
-fi
-
-if ! [ -x "$(command -v hub)" ]; then
-  echo " ==> Installing hub .."
-  export HUB_VERSION="2.12.3"
-  wget https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-amd64-${HUB_VERSION}.tgz
-  tar xf hub-linux-amd64-${HUB_VERSION}.tgz
-  chmod +x hub-linux-amd64-${HUB_VERSION}/bin/hub
-  cp hub-linux-amd64-${HUB_VERSION}/bin/hub /usr/local/bin
-  rm -rf hub-linux-amd64-${HUB_VERSION}
-  rm -f hub-linux-amd64-${HUB_VERSION}.tgz*
 fi
 
 VIM_PLUG_FILE="${HOME}/.vim/autoload/plug.vim"
@@ -232,22 +185,14 @@ if [ ! -d "$(go env GOPATH)" ]; then
   go get -u -v golang.org/x/tools/cmd/goimports
   go get -u -v golang.org/x/tools/cmd/gorename
   go get -u -v golang.org/x/tools/cmd/guru
-  go get -u -v golang.org/x/tools/cmd/gopls
+  # go get -u -v golang.org/x/tools/cmd/gopls
+  GO111MODULE=on go get golang.org/x/tools/gopls@latest
   go get -u -v golang.org/x/lint/golint
   go get -u -v github.com/josharian/impl
   go get -u -v honnef.co/go/tools/cmd/keyify
   go get -u -v github.com/fatih/gomodifytags
   go get -u -v github.com/fatih/motion
   go get -u -v github.com/koron/iferr
-
-  # generic
-  go get -u -v github.com/aybabtme/humanlog/cmd/...
-  go get -u -v github.com/fatih/hclfmt
-
-  export GIT_TAG="v1.2.0" 
-  go get -d -u github.com/golang/protobuf/protoc-gen-go 
-  git -C "$(go env GOPATH)"/src/github.com/golang/protobuf checkout $GIT_TAG 
-  go install github.com/golang/protobuf/protoc-gen-go
 
   cp -r $(go env GOPATH)/bin/* /usr/local/bin/
 fi
@@ -270,7 +215,7 @@ fi
 if [ ! -d "${HOME}/.tmux/plugins" ]; then
   echo " ==> Installing tmux plugins"
   git clone https://github.com/tmux-plugins/tpm "${HOME}/.tmux/plugins/tpm"
-  git clone https://github.com/tmux-plugins/tmux-open.git "${HOME}/.tmux/plugins/tmux-open"
+  # git clone https://github.com/tmux-plugins/tmux-open.git "${HOME}/.tmux/plugins/tmux-open"
   git clone https://github.com/tmux-plugins/tmux-yank.git "${HOME}/.tmux/plugins/tmux-yank"
   git clone https://github.com/tmux-plugins/tmux-prefix-highlight.git "${HOME}/.tmux/plugins/tmux-prefix-highlight"
 fi
@@ -298,45 +243,11 @@ if [ ! -d /root/code/dotfiles ]; then
   ln -sfn $(pwd)/git-prompt.sh "${HOME}/.git-prompt.sh"
   ln -sfn $(pwd)/gitconfig "${HOME}/.gitconfig"
   ln -sfn $(pwd)/agignore "${HOME}/.agignore"
-  ln -sfn $(pwd)/sshconfig "${HOME}/.ssh/config"
-fi
-
-
-if [ ! -f "/root/secrets/pull-secrets.sh" ]; then
-  echo "==> Creating pull-secret.sh script"
-
-cat > pull-secrets.sh <<'EOF'
-#!/bin/bash
-
-set -eu
-
-echo "Authenticating with 1Password"
-export OP_SESSION_my=$(op signin https://my.1password.com ftharsln@gmail.com --output=raw)
-
-echo "Pulling secrets"
-
-op get document 'github_rsa' > github_rsa
-op get document 'zsh_private' > zsh_private
-op get document 'zsh_history' > zsh_history
-
-rm -f ~/.ssh/github_rsa
-ln -sfn $(pwd)/github_rsa ~/.ssh/github_rsa
-chmod 0600 ~/.ssh/github_rsa
-
-ln -sfn $(pwd)/zsh_private ~/.zsh_private
-ln -sfn $(pwd)/zsh_history ~/.zsh_history
-
-echo "Done!"
-EOF
-
-  mkdir -p /root/secrets
-  chmod +x pull-secrets.sh
-  mv pull-secrets.sh ~/secrets
 fi
 
 
 # Set correct timezone
-timedatectl set-timezone Europe/Istanbul
+timedatectl set-timezone Europe/Paris
 
 echo ""
 echo "==> Done!"
