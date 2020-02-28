@@ -32,8 +32,6 @@ alias sq='git rebase -i $(git merge-base $(git rev-parse --abbrev-ref HEAD) mast
 alias co='git checkout master'
 alias po='git pull origin $(git rev-parse --abbrev-ref HEAD)'
 alias b='git branch'
-alias hc='hub compare'
-alias hp='hub pull-request'
 
 
 # open github repo from git repo
@@ -42,11 +40,6 @@ function hb() {
   github_url=`git remote -v | awk '/fetch/{print $2}' | sed -Ee 's#(git@|git://)#https://#' -e 's@com:@com/@' -e 's%\.git$%%' | awk '/github/'`;
   open $github_url
 }
-
-alias -s go='go run'
-alias hs='hugo server'
-
-alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/'
 
 
 export LC_ALL="en_US.UTF-8"
@@ -280,14 +273,10 @@ source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 # ===================
 # brew install jump
 # https://github.com/gsamokovarov/jump
-eval "$(jump shell)"
+# eval "$(jump shell)"
 
-# brew install rbenv
-eval "$(rbenv init -)"
+# ===================
+#    WORKSTATION
+# ===================
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/fatih/Code/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/fatih/Code/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/fatih/Code/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/fatih/Code/google-cloud-sdk/completion.zsh.inc'; fi
-export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+# alias workstation='mosh root@workstation -- tmux new-session -ADs main'
