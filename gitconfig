@@ -36,8 +36,6 @@
 	editor = vim
 	quotepath = false
 	excludesfile = /Users/shanab/.gitignore_global
-[credential]
-	helper = osxkeychain
 [github]
 	user = shanab
 [mergetool]
