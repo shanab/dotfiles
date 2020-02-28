@@ -45,6 +45,11 @@ bind-key s split-window -v -c '#{pane_current_path}'
 bind-key -n C-S-Left swap-window -t -1
 bind-key -n C-S-Right swap-window -t +1
 
+# Pressing Shift+Left or Shift+Right will move between windows.
+bind-key -n S-Right next-window
+bind-key -n S-Left previous-window
+
+
 # Source file
 unbind r
 bind r source-file ~/.tmux.conf \; display "Reloaded!"
