@@ -483,13 +483,20 @@ augroup END
 let g:fzf_command_prefix = 'Fzf'
 let g:fzf_layout = { 'down': '~20%' }
 
+
+function! s:find_git_root()
+  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
+
+command! FzfProjectFiles execute 'FzfFiles' s:find_git_root()
+
 " search 
-nmap <C-p> :FzfHistory<cr>
-imap <C-p> <esc>:<C-u>FzfHistory<cr>
+nmap <C-b> :FzfHistory<cr>
+imap <C-b> <esc>:<C-u>FzfHistory<cr>
 
 " search across files in the current directory
-nmap <C-b> :FzfFiles<cr>
-imap <C-b> <esc>:<C-u>FzfFiles<cr>
+nmap <C-p> :FzfProjectFiles<cr>
+imap <C-p> <esc>:<C-u>FzfProjectFiles<cr>
 
 let g:rg_command = '
   \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
