@@ -172,6 +172,7 @@ if [ ! -f "${VIM_PLUG_FILE}" ]; then
   git clone "https://github.com/tpope/vim-repeat"
   git clone "https://github.com/tpope/vim-scriptease"
   git clone "https://github.com/ervandew/supertab"
+  git clone "https://github.com/christoomey/vim-tmux-navigator"
   popd
 fi
 
