@@ -605,6 +605,9 @@ augroup END
 " ==================== vim-json ====================
 let g:vim_json_syntax_conceal = 0
 
+" ==================== vim-tmux-navigator ===================
+let g:tmux_navigator_disable_when_zoomed = 1
+
 " ==================== Completion + Snippet ====================
 " Ultisnips has native support for SuperTab. SuperTab does omnicompletion by
 " pressing tab. I like this better than autocompletion, but it's still fast.
