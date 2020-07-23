@@ -109,6 +109,11 @@ if ! [ -x "$(command -v kubectl)" ]; then
   chmod 755 /usr/local/bin/kubectl
 fi
 
+if ! [ -x "$(command -v docker-compose)" ]; then
+  curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose 
+  chmod +x /usr/local/bin/docker-compose
+fi
+
 # install doctl
 if ! [ -x "$(command -v doctl)" ]; then
   export DOCTL_VERSION="1.20.1"
