@@ -4,7 +4,6 @@ call plug#begin('~/.vim/plugged')
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'Raimondi/delimitMate'
-Plug 'SirVer/ultisnips'
 Plug 'arthurxavierx/vim-caser'
 Plug 'cespare/vim-toml'
 Plug 'corylanou/vim-present', {'for' : 'present'}
@@ -531,6 +530,10 @@ noremap <Leader>f :NERDTreeFind<cr>
 
 let NERDTreeShowHidden=1
 
+" Fix tmux navigation
+let g:NERDTreeMapJumpPrevSibling=""
+let g:NERDTreeMapJumpNextSibling=""
+
 " ==================== ag ====================
 let g:ackprg = 'ag --vimgrep --smart-case'                                                   
 
@@ -606,7 +609,7 @@ augroup END
 " ==================== vim-json ====================
 let g:vim_json_syntax_conceal = 0
 
-" ==================== vim-tmux-navigator ===================
+" ==================== vim-tmux-navigator ====================
 let g:tmux_navigator_disable_when_zoomed = 1
 
 " ==================== Completion + Snippet ====================
@@ -618,6 +621,20 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"  
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>" 
 
+" ==================== zoom ====================
+function! ZoomToggle() abort
+  if exists('t:zoomed') && t:zoomed
+    exec t:zoom_winrestcmd
+    let t:zoomed = 0
+  else
+    let t:zoom_winrestcmd = winrestcmd()
+    resize
+    vertical resize
+    let t:zoomed = 1
+  endif
+endfunction
+
+nnoremap <silent> <leader>z :call ZoomToggle()<CR>
 
 " ==================== Various other plugin settings ====================
 nmap  -  <Plug>(choosewin)
