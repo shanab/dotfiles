@@ -7,7 +7,7 @@ alias vim="nvim"
 if [ (arch) = 'arm64' ]
     set -gx brew_path /opt/homebrew
 else
-    set -gx brew_path /usr/local/homebrew
+    set -gx brew_path /usr/local/Homebrew
 end
 eval (env SHELL=fish $brew_path/bin/brew shellenv)
 
@@ -32,11 +32,8 @@ set fish_greeting ""
 # https://github.com/fish-shell/fish-shell/issues/6270
 function __fish_describe_command; end
 
-# Senstive functions which are not pushed to Github
-source ~/.config/fish/private.fish
-
 # Get pyenv to work
 pyenv init - | source
 
-# node
-# TODO
+# Senstive functions which are not pushed to Github
+source ~/.config/fish/private.fish
