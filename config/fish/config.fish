@@ -1,5 +1,3 @@
-fish_add_path $HOME/go/bin
-set -gx GOBIN $HOME/go/bin
 set -gx EDITOR nvim
 
 alias vim="nvim"
@@ -34,6 +32,9 @@ function __fish_describe_command; end
 
 # Get pyenv to work
 pyenv init - | source
+
+fish_add_path $HOME/go/bin
+set -gx GOBIN $HOME/go/bin
 
 # Senstive functions which are not pushed to Github
 source ~/.config/fish/private.fish
