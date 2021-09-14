@@ -238,6 +238,21 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+-- Try out gopls config
+nvim_lsp['gopls'].setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  cmd = {"gopls", "serve"},
+  settings = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+      },
+      staticcheck = true,
+    },
+  },
+}
+
 local sumneko_root_path = vim.fn.getenv('HOME') .. '/.local/bin/lua-language-server'
 local sumneko_binary = sumneko_root_path .. '/bin/macOS/lua-language-server'
 
