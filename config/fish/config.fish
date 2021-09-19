@@ -2,12 +2,15 @@ set -gx EDITOR nvim
 
 alias vim="nvim"
 
-if [ (arch) = 'arm64' ]
-    set -gx brew_path /opt/homebrew
-else
-    set -gx brew_path /usr/local/Homebrew
+# set up brew
+if [ (uname) = 'darwin' ]
+    if [ (arch) = 'arm64' ]
+        set -gx brew_path /opt/homebrew
+    else
+        set -gx brew_path /usr/local/Homebrew
+    end
+    eval (env SHELL=fish $brew_path/bin/brew shellenv)
 end
-eval (env SHELL=fish $brew_path/bin/brew shellenv)
 
 # git prompt settings
 set -g __fish_git_prompt_show_informative_status 1
