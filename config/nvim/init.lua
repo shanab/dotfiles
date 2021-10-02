@@ -76,9 +76,36 @@ require(
 		use(
 			"nvim-treesitter/nvim-treesitter-textobjects"
 		)
-		use(
-			"neovim/nvim-lspconfig"
-		) -- Collection of configurations for built-in LSP client
+		use({
+			"neovim/nvim-lspconfig",
+			requires = {
+				{
+					"folke/todo-comments.nvim",
+					config = function(
+
+
+					)
+						require(
+							"todo-comments"
+						).setup({})
+					end,
+				},
+				{
+					"tami5/lspsaga.nvim",
+					config = function(
+
+
+					)
+						require(
+							"lspsaga"
+						).init_lsp_saga({})
+					end,
+				},
+				{
+					"ray-x/lsp_signature.nvim",
+				},
+			},
+		}) -- Collection of configurations for built-in LSP client
 		use(
 			"hrsh7th/nvim-cmp"
 		) -- Autocompletion plugin
@@ -96,6 +123,12 @@ require(
 		) -- Code formatter
 
 		use({
+			"mhinz/vim-startify",
+			event = "BufEnter",
+			config = {},
+		})
+
+		use({
 			"kyazdani42/nvim-tree.lua",
 			requires = "kyazdani42/nvim-web-devicons",
 			config = function(
@@ -111,17 +144,17 @@ require(
 					},
 				})
 			end,
-		})
+		}) -- Folder navigation
 
 		use({
-			"https://github.com/junegunn/fzf.vim",
+			"junegunn/fzf.vim",
 			-- I have the bin globally, so don't build, and just grab plugin directory
 			requires = {
 				{
 					"https://github.com/junegunn/fzf",
 				},
 			},
-		})
+		}) -- File search and ctrlP replacement
 	end
 )
 
@@ -364,6 +397,17 @@ vim.api.nvim_set_keymap(
 	"n",
 	"<leader>n",
 	":NvimTreeFindFile<cr>",
+	{
+		silent = true,
+		noremap = true,
+	}
+)
+
+-- Fzf shortcuts
+vim.api.nvim_set_keymap(
+	"n",
+	"<leader><leader>",
+	":Files<cr>",
 	{
 		silent = true,
 		noremap = true,
