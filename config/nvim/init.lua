@@ -147,6 +147,28 @@ require(
 		}) -- Folder navigation
 
 		use({
+			"christoomey/vim-tmux-navigator",
+			opt = true,
+			cond = function(
+
+			)
+				return vim.env.TMUX
+					~= nil
+			end,
+			config = function(
+
+			)
+				if
+					vim.fn.exists("g:loaded_tmux_navigator")
+					== 0
+				then
+					vim.g.tmux_navigator_disable_when_zoomed =
+						1
+				end
+			end,
+		})
+
+		use({
 			"junegunn/fzf.vim",
 			-- I have the bin globally, so don't build, and just grab plugin directory
 			requires = {
