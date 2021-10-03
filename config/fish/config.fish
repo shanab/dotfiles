@@ -39,5 +39,8 @@ pyenv init - | source
 fish_add_path $HOME/go/bin
 set -gx GOBIN $HOME/go/bin
 
+# Install zoxide
+zoxide init fish | source
+
 # Senstive functions which are not pushed to Github
 source ~/.config/fish/private.fish
