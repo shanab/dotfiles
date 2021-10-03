@@ -431,7 +431,7 @@ vim.api.nvim_set_keymap(
 vim.api.nvim_set_keymap(
 	"n",
 	"<leader><leader>",
-	":Files<cr>",
+	":GitFiles<cr>",
 	{
 		silent = true,
 		noremap = true,
@@ -623,7 +623,7 @@ local on_attach =
 		vim.api.nvim_buf_set_keymap(
 			bufnr,
 			"n",
-			"<leader>q",
+			"<leader>ll",
 			"<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>",
 			opts
 		)
