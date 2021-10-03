@@ -391,6 +391,30 @@ vim.api.nvim_set_keymap(
 		silent = true,
 	}
 )
+-- Better split switching
+local navchars =
+	{
+		"h",
+		"j",
+		"k",
+		"l",
+	}
+for _, nav in pairs(
+	navchars
+) do
+	vim.api.nvim_set_keymap(
+		"n",
+		"<C-"
+			.. nav
+			.. ">",
+		"<C-W>"
+			.. nav,
+		{
+			silent = true,
+			noremap = true,
+		}
+	)
+end
 
 -- NvimTree shortcut
 vim.api.nvim_set_keymap(
