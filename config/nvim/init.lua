@@ -120,6 +120,9 @@ vim.o.hidden = true
 --Enable mouse mode
 vim.o.mouse = "a"
 
+--Yank and paste with the system clipboard
+vim.opt.clipboard = "unnamed"
+
 --Enable break indent
 vim.o.breakindent = true
 
