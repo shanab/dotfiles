@@ -61,6 +61,7 @@ require("packer").startup(function()
 	use("saadparwaiz1/cmp_luasnip")
 	use("L3MON4D3/LuaSnip") -- Snippets plugin
 	use("mhartington/formatter.nvim") -- Code formatter
+	use("dag/vim-fish") -- Fish syntax highlighting
 
 	use({
 		"mhinz/vim-startify",
@@ -274,6 +275,7 @@ vim.api.nvim_set_keymap("i", "jj", "<Esc>", {
 	noremap = true,
 	silent = true,
 })
+
 -- Better split switching
 local navchars = {
 	"h",
@@ -366,7 +368,7 @@ local on_attach = function(_, bufnr)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>sh", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
 	vim.api.nvim_buf_set_keymap(
