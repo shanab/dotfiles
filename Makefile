@@ -4,6 +4,8 @@ sync:
 	mkdir -p ~/.config/kitty
 	mkdir -p ~/.config/fish
 	mkdir -p ~/.config/nvim
+	mkdir -p ~/.config/fd
+
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 	[ -f ~/.config/kitty/kitty.conf ] || ln -s $(PWD)/config/kitty/kitty.conf ~/.config/kitty/kitty.conf
@@ -12,6 +14,7 @@ sync:
 	[ -d ~/.config/fish/functions/ ] || ln -s $(PWD)/config/fish/functions ~/.config/fish/functions
 	[ -d ~/.config/fish/completions/ ] || ln -s $(PWD)/config/fish/completions ~/.config/fish/completions
 	[ -f ~/.config/nvim/init.lua ] || ln -s $(PWD)/config/nvim/init.lua ~/.config/nvim/init.lua
+	[ -f ~/.config/fd/ignore ] || ln -s $(PWD)/config/fd/ignore ~/.config/fd/ignore
 	[ -f ~/.tmux.conf ] || ln -s $(PWD)/config/tmux/tmux.conf ~/.tmux.conf
 	[ -d ~/.tmux/themes/ ] || ln -s $(PWD)/config/tmux/themes ~/.tmux/themes
 
@@ -23,6 +26,7 @@ clean:
 	rm -rf ~/.config/fish/functions
 	rm -rf ~/.config/fish/completions
 	rm -rf ~/.config/nvim
+	rm -rf ~/.config/fd
 	rm -rf ~/.tmux.conf
 	rm -rf ~/.tmux
 

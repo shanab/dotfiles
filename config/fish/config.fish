@@ -42,5 +42,10 @@ set -gx GOBIN $HOME/go/bin
 # Install zoxide
 zoxide init fish | source
 
+# Set up fzf
+set -gx FZF_CTRL_T_COMMAND "fd --hidden --follow --no-ignore-vcs"
+set -gx FZF_ALT_C_COMMAND "$FZF_CTRL_T_COMMAND --type d ."
+set -gx FZF_DEFAULT_COMMAND "$FZF_CTRL_T_COMMAND --type f"
+
 # Senstive functions which are not pushed to Github
 source ~/.config/fish/private.fish
