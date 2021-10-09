@@ -62,6 +62,7 @@ require("packer").startup(function()
 	use("L3MON4D3/LuaSnip") -- Snippets plugin
 	use("mhartington/formatter.nvim") -- Code formatter
 	use("dag/vim-fish") -- Fish syntax highlighting
+	use("wincent/ferret") -- Multi-file search? Still being tested
 
 	use({
 		"mhinz/vim-startify",
