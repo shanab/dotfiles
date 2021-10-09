@@ -3,7 +3,7 @@ set -gx EDITOR nvim
 alias vim="nvim"
 
 # set up brew
-if [ (uname) = 'darwin' ]
+if [ (string lower (uname)) = 'darwin' ]
     if [ (arch) = 'arm64' ]
         set -gx brew_path /opt/homebrew
     else
