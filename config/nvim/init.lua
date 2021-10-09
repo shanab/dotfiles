@@ -62,6 +62,7 @@ require("packer").startup(function()
 	use("L3MON4D3/LuaSnip") -- Snippets plugin
 	use("mhartington/formatter.nvim") -- Code formatter
 	use("dag/vim-fish") -- Fish syntax highlighting
+	use("wincent/ferret") -- Multi-file search? Still being tested
 
 	use({
 		"mhinz/vim-startify",
@@ -153,7 +154,6 @@ vim.o.termguicolors = true
 vim.g.onedark_terminal_italics = 2
 vim.cmd([[colorscheme onedark]])
 
--- NvimTree setup
 vim.g.nvim_tree_indent_markers = 1
 vim.g.nvim_tree_show_icons = {
 	git = 1,
@@ -290,8 +290,12 @@ for _, nav in pairs(navchars) do
 	})
 end
 
--- NvimTree shortcut
-vim.api.nvim_set_keymap("n", "<leader>n", ":NvimTreeFindFile<cr>", {
+-- NvimTree shortcuts
+vim.api.nvim_set_keymap("n", "<leader>ff", ":NvimTreeFindFile<cr>", {
+	silent = true,
+	noremap = true,
+})
+vim.api.nvim_set_keymap("n", "<leader>n", ":NvimTreeToggle<cr>", {
 	silent = true,
 	noremap = true,
 })
