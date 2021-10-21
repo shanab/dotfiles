@@ -63,6 +63,7 @@ require("packer").startup(function()
 	use("mhartington/formatter.nvim") -- Code formatter
 	use("dag/vim-fish") -- Fish syntax highlighting
 	use("wincent/ferret") -- Multi-file search? Still being tested
+	use("pedrohdz/vim-yaml-folds") -- YAML folding? Still being tested
 
 	use({
 		"mhinz/vim-startify",
@@ -144,6 +145,9 @@ vim.opt.softtabstop = 2
 
 -- spaces per tab (when shifting)
 vim.opt.shiftwidth = 2
+
+-- fold level when starting to edit a file
+vim.o.foldlevelstart = 2
 
 --Decrease update time
 vim.o.updatetime = 250
