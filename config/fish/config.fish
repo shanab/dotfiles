@@ -49,3 +49,6 @@ set -gx FZF_DEFAULT_COMMAND "$FZF_CTRL_T_COMMAND --type f"
 
 # Senstive functions which are not pushed to Github
 source ~/.config/fish/private.fish
+
+# rbenv
+status --is-interactive; and rbenv init - fish | source
