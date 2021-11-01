@@ -147,7 +147,7 @@ vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 
 -- fold level when starting to edit a file
-vim.o.foldlevelstart = 2
+vim.o.foldlevelstart = 100
 
 --Decrease update time
 vim.o.updatetime = 250
