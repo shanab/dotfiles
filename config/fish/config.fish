@@ -35,6 +35,7 @@ function __fish_describe_command; end
 
 # Get pyenv to work
 pyenv init - | source
+pyenv virtualenv-init - | source
 
 fish_add_path $HOME/go/bin
 set -gx GOBIN $HOME/go/bin
@@ -51,4 +52,4 @@ set -gx FZF_DEFAULT_COMMAND "$FZF_CTRL_T_COMMAND --type f"
 source ~/.config/fish/private.fish
 
 # rbenv
-status --is-interactive; and rbenv init - fish | source
+# status --is-interactive; and rbenv init - fish | source
