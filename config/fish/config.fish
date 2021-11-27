@@ -51,5 +51,8 @@ set -gx FZF_DEFAULT_COMMAND "$FZF_CTRL_T_COMMAND --type f"
 # Senstive functions which are not pushed to Github
 source ~/.config/fish/private.fish
 
+# Adjust JQ colors
+set -gx JQ_COLORS "2:31"
+
 # rbenv
 # status --is-interactive; and rbenv init - fish | source
