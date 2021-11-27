@@ -64,6 +64,7 @@ require("packer").startup(function()
 	use("dag/vim-fish") -- Fish syntax highlighting
 	use("wincent/ferret") -- Multi-file search? Still being tested
 	use("pedrohdz/vim-yaml-folds") -- YAML folding? Still being tested
+	use("hashivim/vim-terraform") -- Terraform highlighting and commands
 
 	use({
 		"mhinz/vim-startify",
