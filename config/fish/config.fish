@@ -56,3 +56,6 @@ set -gx JQ_COLORS "2:31"
 
 # rbenv
 # status --is-interactive; and rbenv init - fish | source
+
+# PostgreSQL
+fish_add_path /usr/local/opt/postgresql@11/bin
