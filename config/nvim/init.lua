@@ -76,12 +76,7 @@ require("packer").startup(function()
 		"kyazdani42/nvim-tree.lua",
 		requires = "kyazdani42/nvim-web-devicons",
 		config = function()
-			require("nvim-tree").setup({
-				auto_close = true,
-				view = {
-					auto_resize = true,
-				},
-			})
+			require("nvim-tree").setup()
 		end,
 	}) -- Folder navigation
 
@@ -401,7 +396,7 @@ end
 
 -- nvim-cmp supports additional completion capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 -- Enable the following language servers
 local servers = {
@@ -447,7 +442,7 @@ local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
-require("lspconfig").sumneko_lua.setup({
+require("lspconfig").lua_ls.setup({
 	cmd = {
 		sumneko_binary,
 		"-E",
