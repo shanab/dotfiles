@@ -35,7 +35,6 @@ function __fish_describe_command; end
 
 # Get pyenv to work
 pyenv init - | source
-pyenv virtualenv-init - | source
 
 fish_add_path $HOME/go/bin
 set -gx GOBIN $HOME/go/bin
@@ -56,6 +55,3 @@ set -gx JQ_COLORS "2:31"
 
 # rbenv
 # status --is-interactive; and rbenv init - fish | source
-
-# PostgreSQL
-fish_add_path /usr/local/opt/postgresql@11/bin
