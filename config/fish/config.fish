@@ -55,3 +55,7 @@ set -gx JQ_COLORS "2:31"
 
 # rbenv
 # status --is-interactive; and rbenv init - fish | source
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+set --export --prepend PATH "/Users/amshanab/.rd/bin"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)

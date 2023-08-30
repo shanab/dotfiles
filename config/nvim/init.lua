@@ -306,6 +306,9 @@ vim.api.nvim_set_keymap("n", "<leader><leader>", ":Files<cr>", {
 	noremap = true,
 })
 
+-- Terraform
+vim.g.terraform_fmt_on_save = 1
+
 -- Treesitter configuration
 -- Parsers must be installed manually via :TSInstall
 require("nvim-treesitter.configs").setup({
