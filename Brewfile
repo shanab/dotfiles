@@ -28,6 +28,23 @@ brew "neovim"
 brew "eza"
 brew "fzf"
 brew "fd"
+brew "tree"
+brew "bat"
+brew "ranger"
+brew "go"
+brew "rust"
+
+# Kubernetes tools
+brew "kubectl"
+brew "kubectx"
+
+# Network and security tools
+brew "nmap"
+brew "awscli"
+
+# Terminal enhancements
+brew "zsh-autosuggestions"
+brew "cmatrix"
 
 # Window management and system tools
 brew "FelixKratz/formulae/sketchybar"

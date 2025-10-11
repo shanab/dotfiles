@@ -3,3 +3,6 @@ tmux/plugins/
 raycast
 fzf
 history.txt
+
+# Zsh completion cache
+.zcompdump*
