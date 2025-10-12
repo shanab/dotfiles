@@ -6,5 +6,5 @@ history.txt
 
 ./nvim/lazy*
 
-# Zsh completion cache
 .zcompdump*
+.zsh_history
