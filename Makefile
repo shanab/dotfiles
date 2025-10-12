@@ -18,7 +18,7 @@ brew:
 # Stow dotfiles to ~/.config
 stow:
 	@echo "Stowing dotfiles..."
-	stow --verbose=2 .
+	stow .
 
 # Remove stowed dotfiles
 unstow:
