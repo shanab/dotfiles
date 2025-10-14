@@ -46,6 +46,9 @@ brew "awscli"
 brew "zsh-autosuggestions"
 brew "cmatrix"
 
+# Calendar integration
+brew "ical-buddy"
+
 # Window management and system tools
 brew "FelixKratz/formulae/sketchybar"
 # brew "skhd"
