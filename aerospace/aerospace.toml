@@ -42,11 +42,19 @@ if.app-id = 'com.apple.finder'
 run = 'layout floating'
 
 [[on-window-detected]]
+if.app-id = 'org.mozilla.firefox'
+run = ['layout tiling', 'move-node-to-workspace B']
+
+[[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = ['layout floating', 'move-node-to-workspace M']
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.teams2'
+run = ['layout floating', 'move-node-to-workspace M']
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Outlook'
 run = ['layout floating', 'move-node-to-workspace M']
 
 [[on-window-detected]]
