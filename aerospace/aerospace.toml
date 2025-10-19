@@ -73,6 +73,10 @@ run = ['layout tiling', 'move-node-to-workspace C']
 if.app-id = 'dev.kiro.desktop'
 run = ['layout tiling', 'move-node-to-workspace C']
 
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = ['layout tiling', 'move-node-to-workspace C']
+
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]

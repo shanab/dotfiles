@@ -45,6 +45,7 @@ brew "awscli"
 # Terminal enhancements
 brew "zsh-autosuggestions"
 brew "cmatrix"
+brew "pngpaste"
 
 # Calendar integration
 brew "ical-buddy"
