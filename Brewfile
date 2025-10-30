@@ -46,6 +46,7 @@ brew "awscli"
 brew "zsh-autosuggestions"
 brew "cmatrix"
 brew "pngpaste"
+brew "poppler"
 
 # Calendar integration
 brew "ical-buddy"
