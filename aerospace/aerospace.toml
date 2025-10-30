@@ -46,8 +46,18 @@ if.app-id = 'com.cisco.secureclient.gui'
 run = 'layout floating'
 
 [[on-window-detected]]
+if.app-id = 'com.apple.Passwords'
+run = 'layout floating'
+
+[[on-window-detected]]
 if.app-id = 'org.mozilla.firefox'
+if.window-title-regex-substring = '^((?!Picture-in-Picture).)*$'
 run = ['layout tiling', 'move-node-to-workspace B']
+
+[[on-window-detected]]
+if.app-id = 'org.mozilla.firefox'
+if.window-title-regex-substring = 'Picture-in-Picture'
+run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
