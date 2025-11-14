@@ -1,0 +1,24 @@
+# Private/Work-specific zsh configuration
+# Copy this file to ~/.zshrc.private and customize for your work environment
+# This file should NOT be committed to your dotfiles repository
+
+# Work-specific aliases
+# alias deploy-prod="kubectl apply -f prod-deployment.yaml"
+# alias vpn-connect="sudo openconnect --background vpn.company.com"
+# alias work-logs="tail -f /var/log/work-app.log"
+# alias company-ssh="ssh user@work-server.company.com"
+
+# Work-specific environment variables
+# export WORK_API_KEY="your-work-api-key"
+# export COMPANY_REPO_PATH="/path/to/company/repos"
+# export WORK_KUBECONFIG="~/.kube/work-config"
+
+# Work-specific functions
+# work_deploy() {
+#     echo "Deploying to work environment..."
+#     kubectl apply -f "$1"
+# }
+
+# Personal-specific aliases (for personal machine)
+# alias personal-backup="rsync -av ~/Documents/ /backup/"
+# alias home-server="ssh user@home-server.local"

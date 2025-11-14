@@ -8,3 +8,4 @@ history.txt
 
 .zcompdump*
 .zsh_history
+.zshrc.private
