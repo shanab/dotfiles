@@ -153,6 +153,9 @@ eval "$(atuin init zsh)"
 eval "$(direnv hook zsh)"
 eval "$(pyenv init - zsh)"
 
+# Load private/work-specific configuration if it exists
+[[ -f ~/.config/zsh/.zshrc.private ]] && source ~/.config/zsh/.zshrc.private
+
 # Amazon Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
 
