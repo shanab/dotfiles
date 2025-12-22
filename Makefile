@@ -4,8 +4,9 @@
 #   make brew       - Install brew packages only
 #   make stow       - Stow dotfiles only
 #   make unstow     - Remove stowed dotfiles
+#   make tpm        - Install/update Tmux Plugin Manager
 
-.PHONY: install brew stow unstow themes themes-ghostty help
+.PHONY: install brew stow unstow themes themes-ghostty tpm help
 
 # Default target
 install: brew stow
@@ -18,7 +19,7 @@ brew:
 # Stow dotfiles to ~/.config
 stow:
 	@echo "Stowing dotfiles..."
-	stow .
+	stow --verbose=2 .
 
 # Remove stowed dotfiles
 unstow:
@@ -44,6 +45,19 @@ themes-ghostty:
 	@cp -r /tmp/catppuccin-ghostty/themes/* ghostty/themes/
 	@echo "Ghostty themes updated successfully!"
 
+# Install Tmux Plugin Manager (TPM)
+tpm:
+	@echo "Installing TPM..."
+	@if [ -d "$(HOME)/.config/tmux/plugins/tpm" ]; then \
+		echo "TPM already installed, updating..."; \
+		cd "$(HOME)/.config/tmux/plugins/tpm" && git pull; \
+	else \
+		echo "Cloning TPM..."; \
+		mkdir -p "$(HOME)/.config/tmux/plugins"; \
+		git clone https://github.com/tmux-plugins/tpm "$(HOME)/.config/tmux/plugins/tpm"; \
+	fi
+	@echo "TPM installed! Run 'prefix + I' in tmux to install plugins."
+
 # Show help
 help:
 	@echo "Available targets:"
@@ -53,4 +67,5 @@ help:
 	@echo "  unstow   - Remove stowed dotfiles"
 	@echo "  themes   - Download/update all themes"
 	@echo "  themes-ghostty - Download/update Catppuccin Ghostty themes"
+	@echo "  tpm      - Install/update Tmux Plugin Manager"
 	@echo "  help     - Show this help message"

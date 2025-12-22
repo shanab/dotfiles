@@ -2,15 +2,21 @@
 
 ## Install
 
-Once everything has been installed it's time to run TPM, install first:
+TPM is installed to `~/.config/tmux/plugins/tpm` (XDG-compliant location). Install using:
 
 ```bash
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+make tpm
+```
+
+Or manually:
+
+```bash
+git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 ```
 
 ## Run
 
-`Ctrl+I`
+After installing TPM, press `Prefix + I` (capital I) inside tmux to install plugins.
 
 ## Essential Key Bindings
 
