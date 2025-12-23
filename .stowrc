@@ -4,5 +4,6 @@
 --ignore=atuin/*
 --ignore=Brewfile
 --ignore=zsh/.zcompdump
+--ignore=zsh/.zshenv
 --ignore=setup.sh
 --ignore=Makefile

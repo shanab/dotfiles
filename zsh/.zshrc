@@ -64,7 +64,7 @@ alias .....="cd ../../../.."
 alias ......="cd ../../../../.."
 
 # GO
-export GOPATH='$HOME/go'
+export GOPATH="$HOME/go"
 
 # VIM
 alias v="/opt/homebrew/bin/nvim"
@@ -76,8 +76,7 @@ alias nm="nmap -sC -sV -oN nmap"
 export PATH="$HOME/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
-
-export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/omer/.vimpkg/bin:${GOPATH}/bin:$HOME/.cargo/bin
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.vimpkg/bin:$GOPATH/bin:$HOME/.cargo/bin"
 
 alias cl='clear'
 
