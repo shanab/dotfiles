@@ -246,7 +246,7 @@ bind-key    -T copy-mode-vi C-v                    send-keys -X rectangle-toggle
 bind-key    -T copy-mode-vi C-y                    send-keys -X scroll-up
 bind-key    -T copy-mode-vi C-Up                   send-keys -X scroll-up
 bind-key    -T copy-mode-vi C-Down                 send-keys -X scroll-down
-bind-key    -T prefix       Space                  run-shell -b /Users/amshanab/.config/tmux/plugins/tmux-thumbs/tmux-thumbs.sh
+bind-key    -T prefix       Space                  run-shell -b ~/.config/tmux/plugins/tmux-thumbs/tmux-thumbs.sh
 bind-key    -T prefix       !                      break-pane
 bind-key    -T prefix       \"                     choose-tree -w
 bind-key    -T prefix       \#                     list-buffers
@@ -280,17 +280,17 @@ bind-key    -T prefix       ?                      list-keys -N
 bind-key    -T prefix       C                      customize-mode -Z
 bind-key    -T prefix       D                      choose-client -Z
 bind-key    -T prefix       E                      select-layout -E
-bind-key    -T prefix       F                      run-shell -b /Users/amshanab/.config/tmux/plugins/tmux-fzf/main.sh
+bind-key    -T prefix       F                      run-shell -b ~/.config/tmux/plugins/tmux-fzf/main.sh
 bind-key    -T prefix       H                      previous-window
-bind-key    -T prefix       I                      run-shell /Users/amshanab/.config/tmux/plugins/tpm/bindings/install_plugins
+bind-key    -T prefix       I                      run-shell ~/.config/tmux/plugins/tpm/bindings/install_plugins
 bind-key    -T prefix       K                      send-keys clear \; send-keys Enter
 bind-key    -T prefix       L                      next-window
 bind-key    -T prefix       M                      select-pane -M
 bind-key    -T prefix       P                      set-option pane-border-status
-bind-key    -T prefix       R                      source-file /Users/amshanab/.config/tmux/tmux.conf
+bind-key    -T prefix       R                      source-file ~/.config/tmux/tmux.conf
 bind-key    -T prefix       S                      choose-tree -s
-bind-key    -T prefix       U                      run-shell /Users/amshanab/.config/tmux/plugins/tpm/bindings/update_plugins
-bind-key    -T prefix       Y                      run-shell -b /Users/amshanab/.config/tmux/plugins/tmux-yank/scripts/copy_pane_pwd.sh
+bind-key    -T prefix       U                      run-shell ~/.config/tmux/plugins/tpm/bindings/update_plugins
+bind-key    -T prefix       Y                      run-shell -b ~/.config/tmux/plugins/tmux-yank/scripts/copy_pane_pwd.sh
 bind-key    -T prefix       [                      copy-mode
 bind-key    -T prefix       ]                      paste-buffer -p
 bind-key    -T prefix       a                      last-window
@@ -310,11 +310,11 @@ bind-key    -T prefix       q                      display-panes
 bind-key    -T prefix       r                      command-prompt "rename-window %%"
 bind-key    -T prefix       s                      split-window -v -c "#{pane_current_path}"
 bind-key    -T prefix       t                      clock-mode
-bind-key    -T prefix       u                      run-shell -b "/Users/amshanab/.config/tmux/plugins/tmux-fzf-url/fzf-url.sh '' 2000 ''"
+bind-key    -T prefix       u                      run-shell -b "~/.config/tmux/plugins/tmux-fzf-url/fzf-url.sh '' 2000 ''"
 bind-key    -T prefix       v                      split-window -h -c "#{pane_current_path}"
 bind-key    -T prefix       w                      list-windows
 bind-key    -T prefix       x                      swap-pane -D
-bind-key    -T prefix       y                      run-shell -b /Users/amshanab/.config/tmux/plugins/tmux-yank/scripts/copy_line.sh
+bind-key    -T prefix       y                      run-shell -b ~/.config/tmux/plugins/tmux-yank/scripts/copy_line.sh
 bind-key    -T prefix       z                      resize-pane -Z
 bind-key    -T prefix       \{                     swap-pane -U
 bind-key    -T prefix       |                      split-window
@@ -336,20 +336,20 @@ bind-key    -T prefix       M-7                    select-layout main-vertical-m
 bind-key    -T prefix       M-n                    next-window -a
 bind-key    -T prefix       M-o                    rotate-window -D
 bind-key    -T prefix       M-p                    previous-window -a
-bind-key    -T prefix       M-u                    run-shell /Users/amshanab/.config/tmux/plugins/tpm/bindings/clean_plugins
+bind-key    -T prefix       M-u                    run-shell ~/.config/tmux/plugins/tpm/bindings/clean_plugins
 bind-key -r -T prefix       M-Up                   resize-pane -U 5
 bind-key -r -T prefix       M-Down                 resize-pane -D 5
 bind-key -r -T prefix       M-Left                 resize-pane -L 5
 bind-key -r -T prefix       M-Right                resize-pane -R 5
 bind-key    -T prefix       C-a                    last-window
-bind-key    -T prefix       C-c                    new-window -c /Users/amshanab
+bind-key    -T prefix       C-c                    new-window -c ~
 bind-key    -T prefix       C-d                    detach-client
 bind-key    -T prefix       C-l                    refresh-client
 bind-key    -T prefix       C-n                    next-window
 bind-key    -T prefix       C-o                    rotate-window
 bind-key    -T prefix       C-p                    previous-window
-bind-key    -T prefix       C-r                    run-shell /Users/amshanab/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh
-bind-key    -T prefix       C-s                    run-shell /Users/amshanab/.config/tmux/plugins/tmux-resurrect/scripts/save.sh
+bind-key    -T prefix       C-r                    run-shell ~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh
+bind-key    -T prefix       C-s                    run-shell ~/.config/tmux/plugins/tmux-resurrect/scripts/save.sh
 bind-key    -T prefix       C-w                    list-windows
 bind-key    -T prefix       C-x                    lock-server
 bind-key    -T prefix       C-z                    suspend-client

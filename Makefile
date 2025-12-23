@@ -4,12 +4,13 @@
 #   make brew       - Install brew packages only
 #   make stow       - Stow dotfiles only
 #   make unstow     - Remove stowed dotfiles
+#   make zshenv     - Symlink .zshenv to home directory
 #   make tpm        - Install/update Tmux Plugin Manager
 
-.PHONY: install brew stow unstow themes themes-ghostty tpm help
+.PHONY: install brew stow unstow themes themes-ghostty tpm zshenv help
 
 # Default target
-install: brew stow
+install: brew stow zshenv
 
 # Install brew packages from Brewfile
 brew:
@@ -25,6 +26,12 @@ stow:
 unstow:
 	@echo "Unstowing dotfiles..."
 	stow --delete --verbose=2 .
+	@rm -f ~/.zshenv
+
+# Symlink .zshenv to home directory (required for ZDOTDIR)
+zshenv:
+	@echo "Symlinking .zshenv to home directory..."
+	@ln -sf "$(CURDIR)/zsh/.zshenv" ~/.zshenv
 
 # Download and update all themes
 themes: themes-ghostty
@@ -65,6 +72,7 @@ help:
 	@echo "  brew     - Install brew packages only"
 	@echo "  stow     - Stow dotfiles only"
 	@echo "  unstow   - Remove stowed dotfiles"
+	@echo "  zshenv   - Symlink .zshenv to home directory"
 	@echo "  themes   - Download/update all themes"
 	@echo "  themes-ghostty - Download/update Catppuccin Ghostty themes"
 	@echo "  tpm      - Install/update Tmux Plugin Manager"
