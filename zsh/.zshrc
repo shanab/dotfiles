@@ -1,6 +1,3 @@
-# Amazon Q pre block. Keep at the top of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
-
 eval $(/opt/homebrew/bin/brew shellenv)
 
 # Path to your oh-my-zsh installation.
@@ -76,7 +73,8 @@ alias nm="nmap -sC -sV -oN nmap"
 export PATH="$HOME/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.vimpkg/bin:$GOPATH/bin:$HOME/.cargo/bin"
+# PATH configuration (consolidated)
+export PATH="$HOME/.vimpkg/bin:$GOPATH/bin:$HOME/.cargo/bin:$PATH"
 
 alias cl='clear'
 
@@ -111,9 +109,6 @@ alias server='python -m http.server 4445'
 ### FZF ###
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# Homebrew
-export PATH=/opt/homebrew/bin:$PATH
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -153,8 +148,5 @@ eval "$(pyenv init - zsh)"
 
 # Load private/work-specific configuration if it exists
 [[ -f ~/.config/zsh/.zshrc.private ]] && source ~/.config/zsh/.zshrc.private
-
-# Amazon Q post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
