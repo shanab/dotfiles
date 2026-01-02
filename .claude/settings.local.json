@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:lazyvim.github.io)",
+      "WebFetch(domain:www.lazyvim.org)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "ssh"
+  ],
+  "enableAllProjectMcpServers": true
 }
