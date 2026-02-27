@@ -22,6 +22,10 @@ disabled = false
 style = 'bold blue'
 symbol = " "
 
+[python]
+python_binary = []
+format = '[$symbol]($style)'
+
 [golang]
 format = '[ ](bold cyan)'
 
