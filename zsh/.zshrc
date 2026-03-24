@@ -150,6 +150,11 @@ eval "$(atuin init zsh)"
 eval "$(direnv hook zsh)"
 eval "$(pyenv init - zsh)"
 
+# Read aloud (Polly)
+alias pause-reading='pkill -STOP afplay 2>/dev/null && echo "Paused"'
+alias resume-reading='pkill -CONT afplay 2>/dev/null && echo "Resumed"'
+alias stop-reading='pkill -9 afplay 2>/dev/null; kill $(cat /tmp/read-aloud/pid 2>/dev/null) 2>/dev/null; echo "Stopped"'
+
 # Load private/work-specific configuration if it exists
 [[ -f ~/.config/zsh/.zshrc.private ]] && source ~/.config/zsh/.zshrc.private
 
@@ -158,3 +163,4 @@ eval "$(pyenv init - zsh)"
 
 # Kiro CLI post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
+export PATH="$HOME/.local/bin:$PATH"
