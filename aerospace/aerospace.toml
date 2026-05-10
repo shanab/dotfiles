@@ -60,6 +60,16 @@ if.window-title-regex-substring = 'Picture-in-Picture'
 run = 'layout floating'
 
 [[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+if.window-title-regex-substring = '^((?!Picture-in-Picture).)*$'
+run = ['layout tiling', 'move-node-to-workspace B']
+
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+if.window-title-regex-substring = 'Picture-in-Picture'
+run = 'layout floating'
+
+[[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = ['layout floating', 'move-node-to-workspace M']
 
