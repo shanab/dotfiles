@@ -1,8 +1,5 @@
+# Machine-specific login-shell setup that must run first (gitignored)
+[[ -f ~/.config/zsh/.zprofile.pre.private ]] && source ~/.config/zsh/.zprofile.pre.private
 
-# Kiro CLI pre block. Keep at the top of this file.
-[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zprofile.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zprofile.pre.zsh"
-
-
-
-# Kiro CLI post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zprofile.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zprofile.post.zsh"
+# Machine-specific login-shell setup that must run last (gitignored)
+[[ -f ~/.config/zsh/.zprofile.private ]] && source ~/.config/zsh/.zprofile.private

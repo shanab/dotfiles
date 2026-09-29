@@ -1,6 +1,5 @@
-
-# Kiro CLI pre block. Keep at the top of this file.
-[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
+# Machine-specific setup that must run first (gitignored)
+[[ -f ~/.config/zsh/.zshrc.pre.private ]] && source ~/.config/zsh/.zshrc.pre.private
 
 eval $(/opt/homebrew/bin/brew shellenv)
 
@@ -12,7 +11,6 @@ autoload bashcompinit && bashcompinit
 autoload -Uz compinit
 compinit
 source <(kubectl completion zsh)
-complete -C '/usr/local/bin/aws_completer' aws
 
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 bindkey '^w' autosuggest-execute
@@ -150,17 +148,42 @@ eval "$(atuin init zsh)"
 eval "$(direnv hook zsh)"
 eval "$(pyenv init - zsh)"
 
-# Read aloud (Polly)
+# Read aloud (controls afplay playback)
 alias pause-reading='pkill -STOP afplay 2>/dev/null && echo "Paused"'
 alias resume-reading='pkill -CONT afplay 2>/dev/null && echo "Resumed"'
 alias stop-reading='pkill -9 afplay 2>/dev/null; kill $(cat /tmp/read-aloud/pid 2>/dev/null) 2>/dev/null; echo "Stopped"'
 
-# Load private/work-specific configuration if it exists
-[[ -f ~/.config/zsh/.zshrc.private ]] && source ~/.config/zsh/.zshrc.private
+# macOS Secure Input diagnostics — blocks Aerospace / Karabiner / etc. when latched.
+# Common trigger: browser SSO extensions + Passwords Extension Helper.
+secure-input() {
+    local pid=$(ioreg -l -w 0 2>/dev/null | grep -oE 'SecureInputPID"=[0-9]+' | grep -oE '[0-9]+' | head -1)
+    if [[ -z "$pid" ]]; then
+        print -P "%F{green}✓%f Secure Input is not active — keyboard-tap apps work normally"
+        return 0
+    fi
+    local proc=$(lsof -p "$pid" 2>/dev/null | awk '/txt.*REG.*MacOS\/[^\/]*$/ {n=split($NF,a,"/"); print a[n]; exit}')
+    print -P "%F{yellow}⚠%f Secure Input active — PID $pid (${proc:-unknown})"
+    print -P "   Aerospace / Karabiner / any keyboard-tap app is blocked."
+    print -P ""
+    print -P "   Fixes (try in order):"
+    print -P "     1. Terminal.app → menu → Secure Keyboard Entry → toggle ON then OFF"
+    print -P "     2. %F{cyan}secure-input-fix%f       # kill SSO agents (auto-respawn, non-destructive)"
+    print -P "     3. Ctrl+Cmd+Q, unlock with typed password (not Touch ID)"
+    print -P "     4. Reboot (last resort)"
+    return 1
+}
 
-[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+# One-shot remediation: kills the Chrome SSO / Passwords Extension auth agents
+# that commonly leave Secure Input latched. They auto-respawn cleanly on the
+# next SSO request. Does NOT touch Chrome itself.
+secure-input-fix() {
+    print -P "%F{cyan}→%f Killing SSO auth agents (auto-respawn, Chrome stays open)..."
+    killall AppSSOAgent AppSSODaemon AuthenticationServicesAgent 2>/dev/null
+    sleep 1
+    secure-input
+}
 
-
-# Kiro CLI post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
 export PATH="$HOME/.local/bin:$PATH"
+
+# Load private/work-specific configuration if it exists (gitignored). Keep last.
+[[ -f ~/.config/zsh/.zshrc.private ]] && source ~/.config/zsh/.zshrc.private

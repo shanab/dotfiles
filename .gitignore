@@ -9,3 +9,8 @@ history.txt
 .zcompdump*
 .zsh_history
 .zshrc.private
+*.private
+*.private.*
+!*.private.example
+.zsh_sessions/
+.zcompcache/

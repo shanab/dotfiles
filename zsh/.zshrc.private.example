@@ -1,5 +1,10 @@
 # Private/Work-specific zsh configuration
-# Copy this file to ~/.zshrc.private and customize for your work environment
+# Copy this file to ~/.config/zsh/.zshrc.private and customize for your work environment.
+# Anything matching *.private is gitignored. Available hooks:
+#   .zshrc.pre.private     sourced at the top of .zshrc
+#   .zshrc.private         sourced at the bottom of .zshrc (this file)
+#   .zprofile.pre.private  sourced at the top of .zprofile
+#   .zprofile.private      sourced at the bottom of .zprofile
 # This file should NOT be committed to your dotfiles repository
 
 # Work-specific aliases
