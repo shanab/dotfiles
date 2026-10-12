@@ -28,6 +28,7 @@ brew "neovim"
 brew "eza"
 brew "fzf"
 brew "fd"
+brew "grep"      # GNU grep; .zshrc puts its gnubin first on PATH
 brew "tree"
 brew "bat"
 brew "ranger"

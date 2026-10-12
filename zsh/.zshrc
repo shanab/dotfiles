@@ -78,6 +78,10 @@ export PATH="$HOME/.rd/bin:$PATH"
 # PATH configuration (consolidated)
 export PATH="$HOME/.vimpkg/bin:$GOPATH/bin:$HOME/.cargo/bin:$PATH"
 
+# GNU grep as `grep`. macOS BSD grep blocks forever on a FIFO during -r (default -D read)
+# and walks large trees ~5x slower; GNU grep skips devices on recursion.
+[[ -d /opt/homebrew/opt/grep/libexec/gnubin ]] && export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
+
 alias cl='clear'
 
 # K8S
