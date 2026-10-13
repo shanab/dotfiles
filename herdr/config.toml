@@ -1,0 +1,27 @@
+# herdr configuration (Mac client + local server). Stowed to ~/.config/herdr/config.toml
+# Keep [keys] identical to dotfiles-linux/herdr/config.toml so Mac and CDD panes behave the same.
+# After edits: herdr server reload-config
+
+onboarding = false
+
+[terminal]
+new_cwd = "follow"
+
+[ui.toast]
+# macOS notification when a background agent finishes or needs attention.
+delivery = "system"
+delay_seconds = 1
+
+[ui.sound]
+enabled = true
+
+[session]
+resume_agents_on_restore = true
+startup_per_agent_delay_ms = 250
+
+[remote]
+# cdd alias uses a wssh ProxyCommand; use ~/.ssh/config as is.
+manage_ssh_config = false
+
+[experimental]
+pane_history = true

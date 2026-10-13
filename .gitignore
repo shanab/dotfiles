@@ -14,3 +14,7 @@ history.txt
 !*.private.example
 .zsh_sessions/
 .zcompcache/
+
+# herdr runtime state lives next to the stowed config.toml
+herdr/*
+!herdr/config.toml
