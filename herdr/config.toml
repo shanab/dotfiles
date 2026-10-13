@@ -4,6 +4,10 @@
 
 onboarding = false
 
+[keys]
+# Prefix for all herdr commands (ctrl+a, like the old Mac tmux prefix). Shared with dotfiles-linux.
+prefix = "ctrl+a"
+
 [terminal]
 new_cwd = "follow"
 
