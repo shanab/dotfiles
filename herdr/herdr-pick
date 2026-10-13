@@ -3,6 +3,13 @@
 # machine it can reach, then focus it. Bound to prefix+f as a herdr popup
 # ([[keys.command]] in config.toml). Lives in the dotfiles herdr/ dir, stowed to ~/.config/herdr/.
 #
+# fzf opens at once with local tabs; remote machines (5-6s each over ssh) stream in as they
+# answer, in parallel, each capped at HERDR_PICK_TIMEOUT seconds (default 15).
+#
+# Usage:
+#   herdr-pick           interactive picker (what the popup runs)
+#   herdr-pick --list    print the candidate lines and exit (for tests)
+#
 # Needs: herdr, fzf, python3. The popup does not run a login shell, so PATH is set here.
 # Debug: HERDR_PICK_DEBUG=1 (or touch ~/.config/herdr/herdr-pick.debug) logs to ~/.config/herdr/herdr-pick.log
 
@@ -10,61 +17,84 @@ set -uo pipefail
 
 export PATH="$HOME/.local/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$HOME/.toolbox/bin:/usr/local/bin:/usr/bin:/bin:${PATH:-}"
 herdr_bin="${HERDR_BIN_PATH:-herdr}"
+remote_timeout="${HERDR_PICK_TIMEOUT:-15}"
 log="$HOME/.config/herdr/herdr-pick.log"
 debug=0; { [ "${HERDR_PICK_DEBUG:-0}" = 1 ] || [ -e "$HOME/.config/herdr/herdr-pick.debug" ]; } && debug=1
-dbg() { [ "$debug" = 1 ] && printf '%s %s\n' "$(date +%T)" "$*" >> "$log"; return 0; }
+dbg() { [ "$debug" = 1 ] && printf '%s [%s] %s\n' "$(date +%T)" "$$" "$*" >> "$log"; return 0; }
+errlog="/dev/null"; [ "$debug" = 1 ] && errlog="$log"
 
-for dep in fzf python3; do
-  if ! command -v "$dep" >/dev/null 2>&1; then
-    echo "herdr-pick: $dep not found on PATH ($PATH)" >&2; dbg "missing $dep"; sleep 2; exit 1
-  fi
+die() { echo "herdr-pick: $*" >&2; dbg "fatal: $*"; sleep 3; exit 1; }
+for dep in fzf python3 "$herdr_bin"; do
+  command -v "$dep" >/dev/null 2>&1 || die "$dep not found on PATH ($PATH)"
 done
-dbg "start PATH=$PATH TERM=${TERM:-} herdr=$herdr_bin"
+tmo=""; for t in timeout gtimeout; do command -v "$t" >/dev/null 2>&1 && { tmo="$t"; break; }; done
+
+# Run a herdr API command with no stdin (ssh must never read the popup TTY), optional timeout.
+hrun() {
+  local secs="$1"; shift
+  if [ -n "$tmo" ] && [ "$secs" -gt 0 ]; then "$tmo" "$secs" "$herdr_bin" "$@" </dev/null 2>>"$errlog"
+  else "$herdr_bin" "$@" </dev/null 2>>"$errlog"; fi
+}
 
 # Print one line per tab: <machine>\t<tab_id>\t<mark> <workspace>:<tab>
 collect() {
-  local machine="$1" tag="$2" out
-  local -a h=("$herdr_bin"); [ -n "$machine" ] && h+=(--machine "$machine")
-  local ws tabs
-  ws=$("${h[@]}" workspace list 2>>"$log") || { dbg "workspace list failed for '${tag}'"; return 0; }
-  tabs=$("${h[@]}" tab list 2>>"$log")      || { dbg "tab list failed for '${tag}'"; return 0; }
-  printf '%s\n---\n%s\n' "$ws" "$tabs" | python3 -c '
-import sys, json
+  local machine="$1" tag="$2" secs="$3" ws tabs
+  local -a m=(); [ -n "$machine" ] && m=(--machine "$machine")
+  local tmp; tmp=$(mktemp -d "${TMPDIR:-/tmp}/herdr-pick.XXXXXX")
+  hrun "$secs" "${m[@]}" workspace list >"$tmp/ws" & local p1=$!
+  hrun "$secs" "${m[@]}" tab list >"$tmp/tabs" & local p2=$!
+  wait $p1 || { dbg "workspace list failed/timed out for $tag"; rm -rf "$tmp"; return 0; }
+  wait $p2 || { dbg "tab list failed/timed out for $tag"; rm -rf "$tmp"; return 0; }
+  ws=$(<"$tmp/ws"); tabs=$(<"$tmp/tabs"); rm -rf "$tmp"
+  WS="$ws" TABS="$tabs" python3 - "$tag" <<'PY'
+import json, os, sys
 tag = sys.argv[1]
-raw = sys.stdin.read().split("\n---\n", 1)
 try:
-    ws = {w["workspace_id"]: w["label"] for w in json.loads(raw[0])["result"]["workspaces"]}
-    tabs = json.loads(raw[1])["result"]["tabs"]
+    ws = {w["workspace_id"]: w["label"] for w in json.loads(os.environ["WS"])["result"]["workspaces"]}
+    tabs = json.loads(os.environ["TABS"])["result"]["tabs"]
 except Exception as e:
-    print(f"herdr-pick: parse error for {tag}: {e}", file=sys.stderr); sys.exit(0)
+    print(f"herdr-pick: parse error for {tag}: {e}", file=sys.stderr)
+    sys.exit(0)
 marks = {"working": "*", "blocked": "!"}
 for t in tabs:
     label = ws.get(t["workspace_id"], t["workspace_id"])
     mark = marks.get(t.get("agent_status", ""), " ")
-    print(tag + "\t" + t["tab_id"] + "\t" + mark + " " + label + ":" + t["label"])
-' "$tag"
+    print(f'{tag}\t{t["tab_id"]}\t{mark} {label}:{t["label"]}', flush=True)
+PY
 }
 
-local_tag="$(hostname -s 2>/dev/null || echo local)"
+case "$(uname -s)" in Darwin) local_tag="mac" ;; *) local_tag="$(hostname -s 2>/dev/null || echo local)" ;; esac
 case "$local_tag" in dev-dsk-*) local_tag="cdd" ;; esac
 
-lines=$(collect "" "$local_tag")
-while IFS=$'\t' read -r _id label _target _session enabled _rest; do
-  [ -z "${label:-}" ] && continue
-  [ "${enabled:-}" = "enabled" ] || continue
-  lines+=$'\n'"$(collect "$label" "$label")"
-done < <("$herdr_bin" machine list 2>>"$log")
-dbg "collected $(printf '%s\n' "$lines" | grep -c .) lines"
+# Local first, then every enabled saved machine in parallel. Streams to stdout.
+produce() {
+  collect "" "$local_tag" 0
+  local pids=() label enabled
+  while IFS=$'\t' read -r _id label _target _session enabled _rest; do
+    [ -n "${label:-}" ] && [ "${enabled:-}" = "enabled" ] || continue
+    collect "$label" "$label" "$remote_timeout" & pids+=($!)
+  done < <(hrun 5 machine list)
+  [ ${#pids[@]} -gt 0 ] && wait "${pids[@]}"
+  dbg "produce done (${#pids[@]} remote)"
+}
 
-choice=$(printf '%s\n' "$lines" | grep . | fzf \
+if [ "${1:-}" = "--list" ]; then produce; exit 0; fi
+
+dbg "start TERM=${TERM:-} tty=$(tty 2>/dev/null) herdr=$(command -v "$herdr_bin") timeout=${tmo:-none}"
+# Process substitution (not a pipe) so esc/enter returns at once instead of waiting for slow remotes.
+exec 3< <(produce); prod_pid=$!
+choice=$(fzf <&3 \
   --delimiter=$'\t' --with-nth=1,3 --height=100% --reverse \
-  --prompt='workspace:tab > ' --header='* working  ! blocked   enter: focus   esc: cancel' \
+  --prompt='workspace:tab > ' --header='* working  ! blocked   enter: focus   esc: cancel   (remote machines load in a few seconds)' \
   --bind 'esc:abort')
 rc=$?
-[ $rc -ne 0 ] || [ -z "$choice" ] && { dbg "cancelled rc=$rc"; exit 0; }
+exec 3<&-
+pkill -P "$prod_pid" 2>/dev/null; kill "$prod_pid" 2>/dev/null
+dbg "fzf rc=$rc choice=${choice//$'\t'/ | }"
+{ [ $rc -ne 0 ] || [ -z "$choice" ]; } && exit 0
 
 machine=$(printf '%s' "$choice" | cut -f1)
 tab_id=$(printf '%s' "$choice" | cut -f2)
-dbg "focus machine=$machine tab=$tab_id"
-if [ "$machine" = "$local_tag" ]; then "$herdr_bin" tab focus "$tab_id" >/dev/null 2>>"$log"
-else "$herdr_bin" --machine "$machine" tab focus "$tab_id" >/dev/null 2>>"$log"; fi
+if [ "$machine" = "$local_tag" ]; then hrun 0 tab focus "$tab_id" >/dev/null
+else hrun "$remote_timeout" --machine "$machine" tab focus "$tab_id" >/dev/null; fi
+dbg "focus machine=$machine tab=$tab_id rc=$?"

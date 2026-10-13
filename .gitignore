@@ -19,3 +19,4 @@ history.txt
 herdr/*
 !herdr/config.toml
 !herdr/herdr-pick
+!herdr/herdr-pick-test

@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# herdr-pick-test: end-to-end test of herdr-pick in a real herdr pane (real TTY, real fzf).
+# The prefix+f popup cannot be opened through the herdr API, so this is the closest proxy:
+# it creates an unfocused scratch workspace, runs the picker there, reads the screen, types a
+# filter, presses esc, and checks the exit. Your current view is not changed.
+#
+# Usage: ~/.config/herdr/herdr-pick-test [expected-remote-label ...]   (default: every enabled saved machine)
+
+set -uo pipefail
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:/usr/local/bin:/usr/bin:/bin:${PATH:-}"
+pick="$(cd "$(dirname "$0")" && pwd)/herdr-pick"
+h() { herdr "$@" </dev/null; }
+fail=0
+ok()  { printf 'PASS  %s\n' "$*"; }
+bad() { printf 'FAIL  %s\n' "$*"; fail=1; }
+screen() { h pane read "$pane" --source visible; }
+
+case "$(uname -s)" in Darwin) local_tag="mac" ;; *) local_tag="$(hostname -s)"; case "$local_tag" in dev-dsk-*) local_tag="cdd" ;; esac ;; esac
+if [ $# -gt 0 ]; then remotes=("$@")
+else mapfile -t remotes < <(h machine list | awk -F'\t' '$5=="enabled"{print $2}'); fi
+
+ws_json=$(h workspace create --label herdr-pick-test --cwd /tmp --no-focus) || { echo "cannot create scratch workspace"; exit 1; }
+read -r ws pane < <(printf '%s' "$ws_json" | python3 -c 'import sys,json; r=json.load(sys.stdin)["result"]; print(r["workspace"]["workspace_id"], r["root_pane"]["pane_id"])')
+trap 'h workspace close "$ws" >/dev/null 2>&1' EXIT
+sleep 1   # let the shell prompt come up
+
+h pane run "$pane" "$pick; echo PICK_EXIT=\$?" >/dev/null
+
+# 1. fzf must be on screen with local entries within 3s (the old bug: blank popup while ssh ran).
+start=$(date +%s)
+if h pane wait-output "$pane" --source visible --regex "▌ $local_tag |^  $local_tag " --timeout 3000 >/dev/null \
+   && screen | grep -q "workspace:tab >"; then ok "fzf visible with $local_tag entries in $(( $(date +%s)-start ))s"
+else bad "fzf not visible with $local_tag entries within 3s"; screen | tail -5; fi
+
+# 2. Each remote machine must stream in (fzf has no scroll, so filter by machine name).
+for r in "${remotes[@]}"; do
+  h pane send-keys "$pane" ctrl+u >/dev/null; h pane send-text "$pane" "$r " >/dev/null
+  if h pane wait-output "$pane" --source visible --regex "▌ $r |^  $r " --timeout 20000 >/dev/null; then ok "remote '$r' entries shown"
+  else bad "remote '$r' entries not shown within 20s (ssh/Midway?)"; fi
+done
+h pane send-keys "$pane" ctrl+u >/dev/null
+
+# 3. esc must close the picker promptly and exit 0.
+start=$(date +%s)
+h pane send-keys "$pane" esc >/dev/null
+if h pane wait-output "$pane" --match "PICK_EXIT=0" --timeout 3000 >/dev/null; then ok "esc exits 0 in $(( $(date +%s)-start ))s"
+else bad "esc did not exit within 3s"; screen | tail -5; fi
+
+[ $fail = 0 ] && echo "ALL PASS" || echo "SOME FAILED"
+exit $fail
