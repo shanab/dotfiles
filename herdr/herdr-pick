@@ -41,7 +41,7 @@ marks = {"working": "*", "blocked": "!"}
 for t in tabs:
     label = ws.get(t["workspace_id"], t["workspace_id"])
     mark = marks.get(t.get("agent_status", ""), " ")
-    print(f"{tag}\t{t[\"tab_id\"]}\t{mark} {label}:{t[\"label\"]}")
+    print(tag + "\t" + t["tab_id"] + "\t" + mark + " " + label + ":" + t["label"])
 ' "$tag"
 }
 
