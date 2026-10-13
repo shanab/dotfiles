@@ -35,7 +35,7 @@ machines=$("$herdr_bin" machine list 2>/dev/null | awk -F'\t' '$5=="enabled"{pri
 {
   collect ""
   for m in $machines; do collect "$m"; done
-} | fzf --delimiter='\t' --with-nth=1,3 --nth=1,3 --prompt='workspace:tab > ' --height=100% --reverse \
+} | fzf --delimiter='\t' --with-nth=1,3 --prompt='workspace:tab > ' --height=100% --reverse \
       --header='* working  ! blocked   (enter = focus)' | {
   IFS=$'\t' read -r machine tab_id _ || exit 0
   if [ "$machine" = "local" ]; then "$herdr_bin" tab focus "$tab_id" >/dev/null
