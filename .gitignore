@@ -18,3 +18,4 @@ history.txt
 # herdr runtime state lives next to the stowed config.toml
 herdr/*
 !herdr/config.toml
+!herdr/herdr-pick

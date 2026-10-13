@@ -8,6 +8,14 @@ onboarding = false
 # Prefix for all herdr commands (ctrl+a, like the old Mac tmux prefix). Shared with dotfiles-linux.
 prefix = "ctrl+a"
 
+# Fuzzy workspace:tab picker across all machines (prefix+f). Script lives next to this file.
+[[keys.command]]
+key = "prefix+f"
+type = "popup"
+command = "~/.config/herdr/herdr-pick"
+width = "70%"
+height = "70%"
+
 [terminal]
 new_cwd = "follow"
 
