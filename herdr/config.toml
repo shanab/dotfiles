@@ -8,6 +8,13 @@ onboarding = false
 # Prefix for all herdr commands (ctrl+a, like the old Mac tmux prefix). Shared with dotfiles-linux.
 prefix = "ctrl+a"
 
+# Back-and-forth to the last focused pane across tabs and workspaces (like tmux last-window/last-session).
+last_pane = "prefix+a"
+# Settings moved off prefix+s so s can split, as in tmux.
+settings = "prefix+comma"
+# Split down on prefix+s (tmux muscle memory); prefix+minus left unbound.
+split_horizontal = "prefix+s"
+
 # Fuzzy workspace:tab picker across all machines (prefix+f). Script lives next to this file.
 [[keys.command]]
 key = "prefix+f"
@@ -37,3 +44,6 @@ manage_ssh_config = false
 
 [experimental]
 pane_history = true
+
+[ui]
+status_indicators = "symbols"
